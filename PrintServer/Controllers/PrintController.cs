@@ -14,18 +14,27 @@ namespace PrintServer.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Print(printRequest request)
 		{
-			if(request.request.UserName != "test")
+			try
 			{
-				ModelState.AddModelError("UserName", "Invalid username");
+				if (request.request.UserName != "test")
+				{
+					ModelState.AddModelError("UserName", "Invalid username");
+					return ValidationProblem();
+				}
+
+				var b64Str = request.request.Document;
+				var path = System.IO.Path.Combine(AppContext.BaseDirectory, "Result", request.request.FileName);
+				Byte[] bytes = Convert.FromBase64String(b64Str);
+				System.IO.File.WriteAllBytes(path, bytes);
+
+				return Ok();
+
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError("1", ex.Message);
 				return ValidationProblem();
 			}
-
-			var b64Str = request.request.Document;
-			var path = System.IO.Path.Combine(AppContext.BaseDirectory, "Result", request.request.FileName);
-			Byte[] bytes = Convert.FromBase64String(b64Str);
-			System.IO.File.WriteAllBytes(path, bytes);
-
-			return Ok();
 		}
 	}
 }
