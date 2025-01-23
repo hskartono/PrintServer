@@ -1,10 +1,8 @@
-apt-get update
-apt-get install -y wget apt-transport-https
-wget https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-dpkg -i packages-microsoft-prod.deb
-rm packages-microsoft-prod.deb
-apt-get update
-apt-get install -y libssl3 libicu72
-apt-get install -y dotnet-sdk-5.0
+export DOTNET_INSTALL_DIR=/usr/share/dotnet
+curl -sSL https://dot.net/v1/dotnet-install.sh | bash -s -- --version 5.0.408 --install-dir $DOTNET_INSTALL_DIR
+export PATH=$PATH:$DOTNET_INSTALL_DIR
+export DOTNET_ROOT=$DOTNET_INSTALL_DIR
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
+mkdir -p /usr/share/dotnet/host/fxr
 dotnet restore
 dotnet build
