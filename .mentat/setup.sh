@@ -1,12 +1,5 @@
-# Install .NET SDK 5.0
-wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-dpkg -i packages-microsoft-prod.deb
-rm packages-microsoft-prod.deb
-apt-get update
-apt-get install -y dotnet-sdk-5.0
-
-# Restore dependencies
+curl -sSL https://dot.net/v1/dotnet-install.sh | bash -s -- --version 5.0.408
+export DOTNET_ROOT=$HOME/.dotnet
+export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
 dotnet restore
-
-# Install dotnet tools
-dotnet tool restore
+dotnet build
